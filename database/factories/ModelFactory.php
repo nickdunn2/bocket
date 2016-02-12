@@ -19,3 +19,17 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(App\Tag::class, function (Faker\Generator $faker) {
+    return [
+        'user_id' => rand(1, 50),
+        'name' => $faker->word
+    ];
+});
+
+$factory->define(App\Bookmark::class, function (Faker\Generator $faker) {
+    return [
+        'user_id' => rand(1, 50),
+        'link' => $faker->url
+    ];
+});
