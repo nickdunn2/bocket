@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
     /**
      * Run the database seeds.
      *
-     * @return void
+     * @return  void
      */
     public function run()
     {
@@ -20,44 +20,31 @@ class DatabaseSeeder extends Seeder
         Bookmark::truncate();
         DB::table('bookmark_tag')->truncate();
 
+        // Start with 10 users, then iterate through each one to populate the other tables
         $users = factory(App\User::class, 10)->create();
         $users->each(function($user) {
-            foreach(range(1, rand(2,5)) as $int) {
-                $bookmark = factory(App\Bookmark::class)->make();
-                $user->bookmarks()->save($bookmark);
-            }
 
-            foreach(range(1, rand(2,5)) as $int) {
-                $tag = factory(App\Tag::class)->make();
-                $user->tags()->save($tag);
-            }
+            // Create a variable number of bookmarks/tags and persist them to the DB.
+            // saveMany() automatically associates them with the current user_id.
+            $bookmarks = factory(App\Bookmark::class, rand(2, 5))->make();
+            $user->bookmarks()->saveMany($bookmarks);
+            $tags = factory(App\Tag::class, rand(2, 5))->make();
+            $user->tags()->saveMany($tags);
 
-            $tags = $user->tags;
-            foreach($tags as $tag) {
-                $bookmarks = $user->bookmarks;
-                foreach(range(1, rand(2,5)) as $int) {
+            // Everything is populated now except the bookmark_tag pivot table.
+            // For that we need another loop.
+            $tags->each(function($tag) use ($bookmarks) {
+                for ($i=0; $i<rand(1,3); $i++) {
+
+                    // Select a random bookmark from the $bookmarks collection,
+                    // then attach the tag only IF the tag has not already been attached
+                    // to that bookmark.
                     $bookmark = $bookmarks[rand(0, $bookmarks->count() - 1)];
                     if (!$bookmark->tags()->where('tag_id', $tag->id)->exists()) {
                         $bookmark->tags()->attach($tag);
                     }
                 }
-            }
+            });
         });
-
-        /*
-         * another way of doing it if you want to assign a random amount of bookmarks/tags to each user
-         * $users->each(function($user) {
-            for ($i = 0; $i < rand(1, 5); $i++) {
-                factory(App\Bookmark::class)->create([
-                    'user_id'   => $user->id
-                ]);
-                factory(App\Tag::class)->create([
-                    'user_id'   => $user->id
-                ]);
-            }
-
-        });
-         */
-
     }
 }
