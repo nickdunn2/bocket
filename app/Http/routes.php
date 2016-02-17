@@ -15,6 +15,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::resource('user', 'UserController');
+Route::resource('bookmark', 'BookmarkController');
+Route::resource('tag', 'TagController');
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
