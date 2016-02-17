@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
         DB::table('bookmark_tag')->truncate();
 
         // Start with 10 users, then iterate through each one to populate the other tables
-        $users = factory(App\User::class, 10)->create();
+        $users = factory(App\User::class, 50)->create();
         $users->each(function($user) {
 
             // Create a variable number of bookmarks/tags and persist them to the DB.

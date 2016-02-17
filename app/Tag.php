@@ -16,18 +16,16 @@ class Tag extends Model
     ];
 
     /**
-     * Get the bookmarks of this tag.
-     */
-    public function bookmarks() {
-        return $this->belongsToMany('App\Bookmark');
-    }
-
-    /**
      * Get the user this tag belongs to.
      */
     public function user() {
         return $this->belongsTo('App\User');
     }
 
-
+    /**
+     * Get the bookmarks of this tag.
+     */
+    public function bookmarks() {
+        return $this->belongsToMany('App\Bookmark')->withTimestamps();
+    }
 }

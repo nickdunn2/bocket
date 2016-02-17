@@ -17,6 +17,7 @@ class CreateBookmarkTagTable extends Migration
             $table->integer('bookmark_id')->unsigned();
             $table->integer('tag_id')->unsigned();
             $table->timestamps();
+            $table->index(['bookmark_id', 'tag_id']);
         });
     }
 

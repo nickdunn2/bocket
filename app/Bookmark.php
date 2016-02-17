@@ -26,6 +26,6 @@ class Bookmark extends Model
      * Get the tags of this bookmark.
      */
     public function tags() {
-        return $this->belongsToMany('App\Tag');
+        return $this->belongsToMany('App\Tag')->withTimestamps();
     }
 }
