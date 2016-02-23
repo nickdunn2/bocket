@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
-use App\User;
+use App\Bookmark;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class UserController extends Controller
+class BookmarksController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        return User::paginate(10);
+        return Bookmark::with('tags')->paginate(10);
     }
 
     /**
@@ -28,7 +27,12 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $bookmark = new Bookmark;
+        $bookmark->user_id = Auth::user()->id;
+        $bookmark->link = $request->link;
+        $bookmark->save();
+
+        return $bookmark;
     }
 
     /**
@@ -39,7 +43,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return User::findOrFail($id);
+        return Bookmark::with('tags')->findOrFail($id);
     }
 
     /**
@@ -51,7 +55,12 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $bookmark = Bookmark::findOrFail($id);
+        $bookmark->user_id = Auth::user()->id;
+        $bookmark->link = $request->link;
+        $bookmark->save();
+
+        return $bookmark;
     }
 
     /**
@@ -62,6 +71,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $bookmark = Bookmark::findOrFail($id);
+        $bookmark->delete();
+        return $bookmark;
     }
 }

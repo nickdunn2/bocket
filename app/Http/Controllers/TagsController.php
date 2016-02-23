@@ -3,11 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Bookmark;
+use App\Tag;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class BookmarkController extends Controller
+class TagsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class BookmarkController extends Controller
      */
     public function index()
     {
-        return Bookmark::with('tags')->paginate(10);
+        return Tag::with('bookmarks')->paginate(10);
     }
 
     /**
@@ -27,7 +27,12 @@ class BookmarkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $tag = new Tag;
+        $tag->user_id = Auth::user()->id;
+        $tag->name = $request->name;
+        $tag->save();
+
+        return $tag;
     }
 
     /**
@@ -38,7 +43,7 @@ class BookmarkController extends Controller
      */
     public function show($id)
     {
-        return Bookmark::with('tags')->findOrFail($id);
+        return Tag::with('bookmarks')->findOrFail($id);
     }
 
     /**
@@ -50,7 +55,12 @@ class BookmarkController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $tag = Tag::findOrFail($id);
+        $tag->user_id = Auth::user()->id;
+        $tag->name = $request->name;
+        $tag->save();
+
+        return $tag;
     }
 
     /**
@@ -61,6 +71,8 @@ class BookmarkController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $tag = Tag::findOrFail($id);
+        $tag->delete();
+        return $tag;
     }
 }

@@ -15,9 +15,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('user', 'UserController');
-Route::resource('bookmark', 'BookmarkController');
-Route::resource('tag', 'TagController');
+Route::resource('users', 'UsersController', ['except' => [
+    'create', 'edit', 'store'
+]]);
+
+Route::resource('bookmarks', 'BookmarksController', ['except' => [
+    'create', 'edit'
+]]);
+Route::resource('tags', 'TagsController', ['except' => [
+    'create', 'edit'
+]]);
 
 /*
 |--------------------------------------------------------------------------
@@ -30,6 +37,8 @@ Route::resource('tag', 'TagController');
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
-    //
+Route::group(['middleware' => 'web'], function () {
+    Route::auth();
+
+    Route::get('/home', 'HomeController@index');
 });
