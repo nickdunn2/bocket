@@ -40,7 +40,7 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // This still needs some sort of authentication, maybe place inside middleware?
+        // This still needs some sort of authentication/authorization, maybe place inside middleware?
         $user = User::findOrFail($id);
         $user->name = $request->name;
         $user->email = $request->email;

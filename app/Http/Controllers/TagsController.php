@@ -28,7 +28,7 @@ class TagsController extends Controller
     public function store(Request $request)
     {
         $tag = new Tag;
-        $tag->user_id = Auth::user()->id;
+        $tag->user_id = \Auth::user()->id;
         $tag->name = $request->name;
         $tag->save();
 
@@ -55,8 +55,9 @@ class TagsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // To-Do: Can still change info/ownership on a tag not belonging to you.
         $tag = Tag::findOrFail($id);
-        $tag->user_id = Auth::user()->id;
+        $tag->user_id = \Auth::user()->id;
         $tag->name = $request->name;
         $tag->save();
 
@@ -71,6 +72,7 @@ class TagsController extends Controller
      */
     public function destroy($id)
     {
+        // To-Do: Can still delete a tag not belonging to you.
         $tag = Tag::findOrFail($id);
         $tag->delete();
         return $tag;

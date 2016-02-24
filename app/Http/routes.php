@@ -47,5 +47,9 @@ Route::group(['middleware' => 'web'], function () {
         Route::resource('bookmarks', 'BookmarksController', ['only' => [
             'store', 'create', 'destroy'
         ]]);
+
+        Route::resource('tags', 'TagsController', ['only' => [
+            'store', 'create', 'destroy'
+        ]]);
     });
 });

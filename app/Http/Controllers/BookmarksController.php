@@ -55,6 +55,7 @@ class BookmarksController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // To-Do: Can still change info/ownership on a bookmark not belonging to you.
         $bookmark = Bookmark::findOrFail($id);
         $bookmark->user_id = \Auth::user()->id;
         $bookmark->link = $request->link;
@@ -71,6 +72,7 @@ class BookmarksController extends Controller
      */
     public function destroy($id)
     {
+        // To-Do: Can still delete a bookmark not belonging to you.
         $bookmark = Bookmark::findOrFail($id);
         $bookmark->delete();
         return $bookmark;
