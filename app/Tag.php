@@ -16,6 +16,16 @@ class Tag extends Model
     ];
 
     /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id' => 'integer',
+        'user_id' => 'integer'
+    ];
+
+    /**
      * Get the user this tag belongs to.
      */
     public function user() {

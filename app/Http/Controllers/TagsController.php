@@ -57,7 +57,6 @@ class TagsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // To-Do: Can still change info/ownership on a tag not belonging to you.
         $tag = Tag::findOrFail($id);
 
         if (Gate::denies('update-tag', $tag)) {
@@ -67,7 +66,6 @@ class TagsController extends Controller
         $tag->user_id = \Auth::user()->id;
         $tag->name = $request->name;
         $tag->save();
-
         return $tag;
     }
 
