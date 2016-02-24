@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+
 use App\Tag;
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Gate;
 
 class TagsController extends Controller
 {
@@ -57,6 +59,11 @@ class TagsController extends Controller
     {
         // To-Do: Can still change info/ownership on a tag not belonging to you.
         $tag = Tag::findOrFail($id);
+
+        if (Gate::denies('update-tag', $tag)) {
+            abort(403);
+        }
+
         $tag->user_id = \Auth::user()->id;
         $tag->name = $request->name;
         $tag->save();
