@@ -26,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies($gate);
 
-        $gate->define('update-tag', function ($user, $tag) {
+        $gate->define('update-destroy-tag', function ($user, $tag) {
             return $user->id === $tag->user_id;
         });
     }

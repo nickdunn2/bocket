@@ -59,7 +59,7 @@ class TagsController extends Controller
     {
         $tag = Tag::findOrFail($id);
 
-        if (Gate::denies('update-tag', $tag)) {
+        if (Gate::denies('update-destroy-tag', $tag)) {
             abort(403);
         }
 
@@ -79,6 +79,10 @@ class TagsController extends Controller
     {
         // To-Do: Can still delete a tag not belonging to you.
         $tag = Tag::findOrFail($id);
+
+        if (Gate::denies('update-destroy-tag', $tag)) {
+            abort(403);
+        }
         $tag->delete();
         return $tag;
     }
