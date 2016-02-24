@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Bookmark;
 use App\Http\Requests;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\Controller;
 
 class BookmarksController extends Controller
@@ -57,6 +58,11 @@ class BookmarksController extends Controller
     {
         // To-Do: Can still change info/ownership on a bookmark not belonging to you.
         $bookmark = Bookmark::findOrFail($id);
+
+        if (Gate::denies('update-destroy-bookmark', $bookmark)) {
+            abort(403);
+        }
+
         $bookmark->user_id = \Auth::user()->id;
         $bookmark->link = $request->link;
         $bookmark->save();
@@ -74,6 +80,11 @@ class BookmarksController extends Controller
     {
         // To-Do: Can still delete a bookmark not belonging to you.
         $bookmark = Bookmark::findOrFail($id);
+
+        if (Gate::denies('update-destroy-bookmark', $bookmark)) {
+            abort(403);
+        }
+
         $bookmark->delete();
         return $bookmark;
     }
