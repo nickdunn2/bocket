@@ -60,7 +60,7 @@ class TagsController extends Controller
         $tag = Tag::findOrFail($id);
 
         if (Gate::denies('update-destroy-tag', $tag)) {
-            abort(403);
+            abort(403, 'Not authorized, dummy.');
         }
 
         $tag->user_id = \Auth::user()->id;
@@ -81,7 +81,7 @@ class TagsController extends Controller
         $tag = Tag::findOrFail($id);
 
         if (Gate::denies('update-destroy-tag', $tag)) {
-            abort(403);
+            abort(403, 'Not authorized, dummy.');
         }
         $tag->delete();
         return $tag;

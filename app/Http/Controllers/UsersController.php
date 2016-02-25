@@ -43,7 +43,7 @@ class UsersController extends Controller
         // This still needs some sort of authentication/authorization, maybe place inside middleware?
         $user = User::findOrFail($id);
         if(auth()->user()->id !== $user->id) {
-            abort(403, 'Not authorized.');
+            abort(403, 'Not authorized, dummy.');
         }
         $user->name = $request->name;
         $user->email = $request->email;
@@ -61,7 +61,7 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($id);
         if(auth()->user()->id !== $user->id) {
-            abort(403, 'Not authorized.');
+            abort(403, 'Not authorized, dummy.');
         }
         $user->delete();
         return $user;

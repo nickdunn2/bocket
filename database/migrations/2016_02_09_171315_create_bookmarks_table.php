@@ -14,10 +14,15 @@ class CreateBookmarksTable extends Migration
     {
         Schema::create('bookmarks', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->integer('user_id')->unsigned()->index();
             $table->string('link');
             $table->timestamps();
-            $table->index('user_id');
+            // Still needs foreign key cascade delete. sqlite has foreign_keys disabled
+            // Can't figure out how to enable -- PRAGMA foreign_keys = ON; did NOT work
+            // Maybe just somehow delete the index instead?
+//            $table->foreign('user_id')
+//                  ->references('id')->on('users')
+//                  ->onDelete('cascade');
         });
     }
 

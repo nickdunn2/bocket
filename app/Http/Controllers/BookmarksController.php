@@ -60,7 +60,7 @@ class BookmarksController extends Controller
         $bookmark = Bookmark::findOrFail($id);
 
         if (Gate::denies('update-destroy-bookmark', $bookmark)) {
-            abort(403);
+            abort(403, 'Not authorized, dummy.');
         }
 
         $bookmark->user_id = \Auth::user()->id;
@@ -82,7 +82,7 @@ class BookmarksController extends Controller
         $bookmark = Bookmark::findOrFail($id);
 
         if (Gate::denies('update-destroy-bookmark', $bookmark)) {
-            abort(403);
+            abort(403, 'Not authorized, dummy.');
         }
 
         $bookmark->delete();
