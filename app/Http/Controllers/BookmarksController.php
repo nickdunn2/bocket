@@ -17,7 +17,7 @@ class BookmarksController extends Controller
      */
     public function index()
     {
-        return Bookmark::with('tags')->paginate(10);
+        return Bookmark::paginate(10);
     }
 
     /**
@@ -29,10 +29,9 @@ class BookmarksController extends Controller
     public function store(Request $request)
     {
         $bookmark = new Bookmark;
-        $bookmark->user_id = \Auth::user()->id;
+        $bookmark->user_id = auth()->user()->id;
         $bookmark->link = $request->link;
         $bookmark->save();
-
         return $bookmark;
     }
 
@@ -56,17 +55,11 @@ class BookmarksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // To-Do: Can still change info/ownership on a bookmark not belonging to you.
         $bookmark = Bookmark::findOrFail($id);
-
-        if (Gate::denies('update-destroy-bookmark', $bookmark)) {
-            abort(403, 'Not authorized, dummy.');
-        }
-
-        $bookmark->user_id = \Auth::user()->id;
+        $this->authorize('update-destroy', $bookmark);
+        $bookmark->user_id = auth()->user()->id;
         $bookmark->link = $request->link;
         $bookmark->save();
-
         return $bookmark;
     }
 
@@ -78,13 +71,8 @@ class BookmarksController extends Controller
      */
     public function destroy($id)
     {
-        // To-Do: Can still delete a bookmark not belonging to you.
         $bookmark = Bookmark::findOrFail($id);
-
-        if (Gate::denies('update-destroy-bookmark', $bookmark)) {
-            abort(403, 'Not authorized, dummy.');
-        }
-
+        $this->authorize('update-destroy', $bookmark);
         $bookmark->delete();
         return $bookmark;
     }

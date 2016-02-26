@@ -30,7 +30,7 @@ class TagsController extends Controller
     public function store(Request $request)
     {
         $tag = new Tag;
-        $tag->user_id = \Auth::user()->id;
+        $tag->user_id = auth()->user()->id;
         $tag->name = $request->name;
         $tag->save();
 
@@ -58,12 +58,8 @@ class TagsController extends Controller
     public function update(Request $request, $id)
     {
         $tag = Tag::findOrFail($id);
-
-        if (Gate::denies('update-destroy-tag', $tag)) {
-            abort(403, 'Not authorized, dummy.');
-        }
-
-        $tag->user_id = \Auth::user()->id;
+        $this->authorize('update-destroy', $tag);
+        $tag->user_id = auth()->user()->id;
         $tag->name = $request->name;
         $tag->save();
         return $tag;
@@ -77,12 +73,8 @@ class TagsController extends Controller
      */
     public function destroy($id)
     {
-        // To-Do: Can still delete a tag not belonging to you.
         $tag = Tag::findOrFail($id);
-
-        if (Gate::denies('update-destroy-tag', $tag)) {
-            abort(403, 'Not authorized, dummy.');
-        }
+        $this->authorize('update-destroy', $tag);
         $tag->delete();
         return $tag;
     }
