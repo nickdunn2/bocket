@@ -40,10 +40,9 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // This still needs some sort of authentication/authorization, maybe place inside middleware?
         $user = User::findOrFail($id);
         if(auth()->user()->id !== $user->id) {
-            abort(403, 'Not authorized, dummy.');
+            return response()->json(['error' => 403, 'message' => 'This action is unauthorized.'], 403);
         }
         $user->name = $request->name;
         $user->email = $request->email;
@@ -61,7 +60,7 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($id);
         if(auth()->user()->id !== $user->id) {
-            abort(403, 'Not authorized, dummy.');
+            return response()->json(['error' => 403, 'message' => 'This action is unauthorized.'], 403);
         }
         $user->delete();
         return $user;
